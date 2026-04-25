@@ -164,20 +164,20 @@ class Parser:
 		if self.token.tag in self.firstExtendedRelationalExpression:
 			if self.token.tag == ord('<'):
 				self.check(ord('<'))
-				self.additiveExpression()
-				return self.extendedRelationalExpression(left)
+				right = self.additiveExpression()
+				return self.extendedRelationalExpression(LessThan(left, right))
 			elif self.token.tag == ord('>'):
 				self.check(ord('>'))
-				self.additiveExpression()
-				return self.extendedRelationalExpression(left)
+				right = self.additiveExpression()
+				return self.extendedRelationalExpression(GreaterThan(left, right))
 			elif self.token.tag == Tag.LEQ:
 				self.check(Tag.LEQ)
-				self.additiveExpression()
-				return self.extendedRelationalExpression(left)
+				right = self.additiveExpression()
+				return self.extendedRelationalExpression(LessOrEqual(left, right))
 			elif self.token.tag == Tag.GEQ:
 				self.check(Tag.GEQ)
-				self.additiveExpression()
-				return self.extendedRelationalExpression(left)
+				right = self.additiveExpression()
+				return self.extendedRelationalExpression(GreaterOrEqual(left, right))
 		else:
 			return left
 
@@ -196,12 +196,12 @@ class Parser:
 		if self.token.tag in self.firstExtendedEqualityExpression:
 			if self.token.tag == ord('='):
 				self.check(ord('='))
-				self.relationalExpression()
-				return self.extendedEqualityExpression(left)
+				right = self.relationalExpression()
+				return self.extendedEqualityExpression(Equal(left, right))
 			elif self.token.tag == Tag.NEQ:
 				self.check(Tag.NEQ)
-				self.relationalExpression()
-				return self.extendedEqualityExpression(left)
+				right = self.relationalExpression()
+				return self.extendedEqualityExpression(NEQ(left, right))
 		else:
 			return left
 
@@ -219,8 +219,8 @@ class Parser:
 		if self.token.tag in self.firstExtendedConditionalTerm:
 			if self.token.tag == Tag.AND:
 				self.check(Tag.AND)
-				self.equalityExpression()
-				return self.extendedConditionalTerm(left)
+				right = self.equalityExpression()
+				return self.extendedConditionalTerm(And(left, right))
 		else:
 			return left
 
@@ -238,8 +238,8 @@ class Parser:
 		if self.token.tag in self.firstExtendedConditionalExpression:
 			if self.token.tag == Tag.OR:
 				self.check(Tag.OR)
-				self.conditionalTerm()
-				return self.extendedConditionalExpression(left)
+				right = self.conditionalTerm()
+				return self.extendedConditionalExpression(Or(left, right))
 		else:
 			return left
 
